@@ -1,0 +1,11 @@
+.bar:hover{
+    fill: rgb(206, 197, 71);
+}
+
+.x-axis{
+    font-size: medium;
+}
+
+.y-axis{
+    font-size: small;
+}

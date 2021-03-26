@@ -1,25 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import BarChart from "./frontend/BarChart";
+import "./App.css";
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="main d-flex flex-column justify-content-center mb-4">
+      <div className="d-flex justify-content-center align-items-center">
+      <h2 className="title mt-4 mb-4 pd-4 ">
+        Interactive Visualization tool to decide the best time to Travel
+      </h2>
+      </div>
+      <BarChart />
     </div>
   );
-}
+};
 
 export default App;

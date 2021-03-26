@@ -6,21 +6,16 @@ import axios from "axios";
 import { MenuItem, Select, InputLabel } from "@material-ui/core";
 
 const BarChart = () => {
-  const [data, setData] = useState([
-    20,
-    40,
-    5,
-    60,
-    25,
-    70,
-    30,
-    70,
-    40,
-    20,
-    80,
-    10,
-  ]);
-  const [xValues, setxValues] = useState([
+  // data => y-axis values
+  const [data, setData] = useState([]);
+  // xValues => x-axis values
+  const [xValues, setxValues] = useState([]);
+  const [monthSelector, setMonthSelector] = useState("None");
+  const [yearSelector, setYearSelector] = useState("2019");
+  const svgRef = useRef();
+  const maxVal = d3.max(data);
+  const [isYearSelected, setIsYearSelected] = useState(true);
+  const months = [
     "Jan",
     "Feb",
     "Mar",
@@ -33,15 +28,25 @@ const BarChart = () => {
     "Oct",
     "Nov",
     "Dec",
-  ]);
-  const [monthSelector, setMonthSelector] = useState("None");
-  const [yearSelector, setYearSelector] = useState("None");
-  const svgRef = useRef();
-  const maxVal = d3.max(data);
+  ];
+
+  const fetchAPIYear = async () => {
+    const body = {
+      csv: "monthly_updated.csv",
+    };
+    await axios.post("/csv/barChart/year", body).then((res) => {
+      console.log(res.data);
+      setIsYearSelected(false);
+      setxValues(res.data["xValues"]);
+      setData(res.data["yValues"]);
+    });
+  };
 
   useEffect(() => {
     const svg = select(svgRef.current);
-
+    if (isYearSelected) {
+      fetchAPIYear();
+    }
     // Axis Scaling
     const xScale = scaleBand()
       .domain(xValues.map((val, index) => val))
@@ -71,8 +76,9 @@ const BarChart = () => {
     svg
       .select(".y-title")
       .append("text")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 18)
+      //   .attr("font-family", "sans-serif")
+      //   .attr("font-size", 16)
+      //   .attr('font-weight', 100)
       .attr("x", -10)
       .attr("y", -1)
       .attr("transform", "translate(-60,250) rotate(270)")
@@ -82,7 +88,7 @@ const BarChart = () => {
       .select(".x-title")
       .append("text")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 18)
+      .attr("font-size", 16)
       .attr("x", -10)
       .attr("y", -1)
       .attr("transform", "translate(250,350) rotate(0)")
@@ -127,78 +133,68 @@ const BarChart = () => {
       .transition()
       .attr("fill", colorScale)
       .attr("height", (value) => 300 - yScale(value));
-  }, [data, xValues]);
+  }, [data]);
 
   const handleMonthSelector = (event) => {
     setMonthSelector(event.target.value);
-    if (xValues.includes(event.target.value)){
-        console.log(xValues.indexOf(event.target.value)+1)
-        let month = xValues.indexOf(event.target.value)+1
-        const body ={
-            'csv': "daily.csv",
-            'month': month
-        }
-        axios.post('/csv/barChart/month', body)
-        .then((res) => {
-            console.log(res.data['xValues'])
-            setData(res.data["yValues"])
-            // setxValues(res.data['xValues'])
-            // console.log(res)
-        })
-
+    setIsYearSelected(false);
+    setYearSelector("None");
+    if (months.includes(event.target.value)) {
+      console.log(months.indexOf(event.target.value) + 1);
+      let month = months.indexOf(event.target.value) + 1;
+      const body = {
+        csv: "daily.csv",
+        month: month,
+      };
+      axios.post("/csv/barChart/month", body).then((res) => {
+        console.log(res.data);
+        setxValues(res.data["xValues"]);
+        setData(res.data["yValues"]);
+      });
     }
   };
 
   const handleYearSelector = (event) => {
     setYearSelector(event.target.value);
-    const body = {
-        "csv" : "monthly_updated.csv"
-    }
-    if (event.target.value === '2019'){
-        axios.post('/csv/barChart', body)
-        .then((res) => {
-            // console.log(res.data["yValues"]);
-            setData(res.data["yValues"])
-        })
+    setMonthSelector("None");
+    if (!isYearSelected) {
+      fetchAPIYear();
     }
   };
 
   return (
     <div className="bar-main d-flex flex-column justify-content-center align-items-center mt-4 pt-4">
-        <div className="selector d-flex flex-row justify-content-end align-items-end">
-      <div className=" d-flex flex-column p-2">
-        {/* <div className="d-flex flex-column align-items-end justify-content-end"> */}
-        <InputLabel className="">
-          Month
-        </InputLabel>
-        <Select
-          label="Select"
-          value={monthSelector}
-          onChange={handleMonthSelector}
-          variant="outlined"
-        >
-          <MenuItem value="None">None</MenuItem>
-          {xValues.map((val, index) => (
-            <MenuItem value={val} key={index}>
-              {val}
-            </MenuItem>
-          ))}
-        </Select>
+      <div className="selector d-flex flex-row justify-content-end align-items-end">
+        <div className=" d-flex flex-column p-2">
+          {/* <div className="d-flex flex-column align-items-end justify-content-end"> */}
+          <InputLabel className="">Month</InputLabel>
+          <Select
+            label="Select"
+            value={monthSelector}
+            onChange={handleMonthSelector}
+            variant="outlined"
+          >
+            <MenuItem value="None">None</MenuItem>
+            {months.map((val, index) => (
+              <MenuItem value={val} key={index}>
+                {val}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+        <div className="d-flex flex-column p-2">
+          <InputLabel className="">Year</InputLabel>
+          <Select
+            label="Select"
+            value={yearSelector}
+            onChange={handleYearSelector}
+            variant="outlined"
+          >
+            <MenuItem value="None">None</MenuItem>
+            <MenuItem value="2019">2019</MenuItem>
+          </Select>
+        </div>
       </div>
-      <div className="d-flex flex-column p-2">
-        <InputLabel className="">
-          Year
-        </InputLabel>
-        <Select
-          label="Select"
-          value={yearSelector}
-          onChange={handleYearSelector}
-          variant="outlined"
-        >
-          <MenuItem value="None">None</MenuItem>
-          <MenuItem value="2019">2019</MenuItem>
-        </Select>
-      </div></div>
       <div className="d-flex mt-4 w-100 justify-content-center">
         <svg
           ref={svgRef}

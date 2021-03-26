@@ -10,6 +10,12 @@
     font-size: small;
 }
 
+.y-title{
+    font-family: inherit;
+    font-size: medium;
+    
+}
+
 .tooltip{
     font-size: large;
 }

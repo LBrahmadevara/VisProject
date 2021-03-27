@@ -1,3 +1,10 @@
 .title{
   font-weight: bold;
 }
+
+.main{
+  /* background-color: antiquewhite; */
+  background-color: rgb(190, 190, 141);
+  height: 100vh;
+  padding-top: 2rem;
+}

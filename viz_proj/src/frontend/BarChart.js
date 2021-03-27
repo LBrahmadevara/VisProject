@@ -15,6 +15,7 @@ const BarChart = () => {
   const svgRef = useRef();
   const maxVal = d3.max(data);
   const [isYearSelected, setIsYearSelected] = useState(true);
+  const [isMonthSelected, setIsMonthSelected] = useState(false);
   const months = [
     "Jan",
     "Feb",
@@ -50,25 +51,37 @@ const BarChart = () => {
     // Axis Scaling
     const xScale = scaleBand()
       .domain(xValues.map((val, index) => val))
-      .range([0, 600])
+      .range([0, 1000])
       .padding(0.5);
 
     // xScale1 is for mapping x-coordinates in bar graph
     const xScale1 = scaleBand()
       .domain(xValues.map((val, index) => index))
-      .range([0, 600])
+      .range([0, 1000])
       .padding(0.5);
 
     const yScale = scaleLinear().domain([0, maxVal]).range([300, 0]);
 
     const colorScale = scaleLinear()
       .domain([0, maxVal])
-      .range(["orange", "orange"]);
+      .range(["rgb(241, 201, 125)", "rgb(241, 201, 125)"]);
 
     const xAxis = axisBottom(xScale).ticks(data.length);
-    svg.select(".x-axis").style("transform", "translateY(300px)").call(xAxis);
+    if (!isMonthSelected) {
+      svg.select(".x-axis").style("transform", "translateY(300px)").call(xAxis);
+    } else {
+      svg
+        .select(".x-axis")
+        .style("transform", "translateY(300px)")
+        .call(xAxis)
+        .selectAll("text")
+        .attr("y", 8)
+        .attr("x", 9)
+        .attr("dy", ".35em")
+        .attr("transform", "rotate(45)")
+        .style("text-anchor", "start");
+    }
 
-    // const yAxis = axisLeft(yScale).ticks(Math.round(data.length / 2));
     const yAxis = axisLeft(yScale).ticks(7);
     svg.select(".y-axis").call(yAxis);
 
@@ -76,9 +89,7 @@ const BarChart = () => {
     svg
       .select(".y-title")
       .append("text")
-      //   .attr("font-family", "sans-serif")
-      //   .attr("font-size", 16)
-      //   .attr('font-weight', 100)
+      .attr("font-family", "inherit")
       .attr("x", -10)
       .attr("y", -1)
       .attr("transform", "translate(-60,250) rotate(270)")
@@ -87,12 +98,12 @@ const BarChart = () => {
     svg
       .select(".x-title")
       .append("text")
-      .attr("font-family", "sans-serif")
+      .attr("font-family", "inherit")
       .attr("font-size", 16)
-      .attr("x", -10)
-      .attr("y", -1)
+      .attr("x", 200)
+      .attr("y", 20)
       .attr("transform", "translate(250,350) rotate(0)")
-      .text("Year 2019");
+      .text("San Diego (Year 2019)");
 
     // bar chart
     svg
@@ -137,6 +148,7 @@ const BarChart = () => {
 
   const handleMonthSelector = (event) => {
     setMonthSelector(event.target.value);
+    setIsMonthSelected(true);
     setIsYearSelected(false);
     setYearSelector("None");
     if (months.includes(event.target.value)) {
@@ -156,6 +168,7 @@ const BarChart = () => {
 
   const handleYearSelector = (event) => {
     setYearSelector(event.target.value);
+    setIsMonthSelected(false);
     setMonthSelector("None");
     if (!isYearSelected) {
       fetchAPIYear();
@@ -166,7 +179,6 @@ const BarChart = () => {
     <div className="bar-main d-flex flex-column justify-content-center align-items-center mt-4 pt-4">
       <div className="selector d-flex flex-row justify-content-end align-items-end">
         <div className=" d-flex flex-column p-2">
-          {/* <div className="d-flex flex-column align-items-end justify-content-end"> */}
           <InputLabel className="">Month</InputLabel>
           <Select
             label="Select"
@@ -198,7 +210,7 @@ const BarChart = () => {
       <div className="d-flex mt-4 w-100 justify-content-center">
         <svg
           ref={svgRef}
-          style={{ width: "600px", height: "300px", overflow: "visible" }}
+          style={{ width: "1000px", height: "300px", overflow: "visible" }}
         >
           <g className="x-axis" />
           <g className="y-axis" />

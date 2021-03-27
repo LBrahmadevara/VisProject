@@ -2,48 +2,58 @@ import React, { useState, useEffect, useRef } from "react";
 import { select, scaleBand, scaleLinear, axisBottom, axisLeft } from "d3";
 import * as d3 from "d3";
 import "./BarChart.css";
+import axios from "axios";
+import { MenuItem, Select, InputLabel } from "@material-ui/core";
 
 const BarChart = () => {
-  const [data, setData] = useState([
-    20,
-    40,
-    5,
-    60,
-    25,
-    70,
-    30,
-    70,
-    40,
-    20,
-    80,
-    10,
-  ]);
-  const xValues = [
-    "Jan",
-    "feb",
-    "mar",
-    "apr",
-    "may",
-    "june",
-    "july",
-    "aug",
-    "sep",
-    "oct",
-    "nov",
-    "dec",
-  ];
+  // data => y-axis values
+  const [data, setData] = useState([]);
+  // xValues => x-axis values
+  const [xValues, setxValues] = useState([]);
+  const [monthSelector, setMonthSelector] = useState("None");
+  const [yearSelector, setYearSelector] = useState("2019");
   const svgRef = useRef();
   const maxVal = d3.max(data);
+  const [isYearSelected, setIsYearSelected] = useState(true);
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "June",
+    "July",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const fetchAPIYear = async () => {
+    const body = {
+      csv: "monthly_updated.csv",
+    };
+    await axios.post("/csv/barChart/year", body).then((res) => {
+      console.log(res.data);
+      setIsYearSelected(false);
+      setxValues(res.data["xValues"]);
+      setData(res.data["yValues"]);
+    });
+  };
 
   useEffect(() => {
     const svg = select(svgRef.current);
-
+    if (isYearSelected) {
+      fetchAPIYear();
+    }
     // Axis Scaling
     const xScale = scaleBand()
       .domain(xValues.map((val, index) => val))
       .range([0, 600])
       .padding(0.5);
 
+    // xScale1 is for mapping x-coordinates in bar graph
     const xScale1 = scaleBand()
       .domain(xValues.map((val, index) => index))
       .range([0, 600])
@@ -58,29 +68,31 @@ const BarChart = () => {
     const xAxis = axisBottom(xScale).ticks(data.length);
     svg.select(".x-axis").style("transform", "translateY(300px)").call(xAxis);
 
-    const yAxis = axisLeft(yScale).ticks(Math.round(data.length / 2));
+    // const yAxis = axisLeft(yScale).ticks(Math.round(data.length / 2));
+    const yAxis = axisLeft(yScale).ticks(7);
     svg.select(".y-axis").call(yAxis);
 
     // Axis titles
     svg
       .select(".y-title")
       .append("text")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 18)
+      //   .attr("font-family", "sans-serif")
+      //   .attr("font-size", 16)
+      //   .attr('font-weight', 100)
       .attr("x", -10)
       .attr("y", -1)
-      .attr("transform", "translate(-30,250) rotate(270)")
+      .attr("transform", "translate(-60,250) rotate(270)")
       .text("Number of Availabilities");
 
     svg
       .select(".x-title")
       .append("text")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 18)
+      .attr("font-size", 16)
       .attr("x", -10)
       .attr("y", -1)
       .attr("transform", "translate(250,350) rotate(0)")
-      .text("Year 2020");
+      .text("Year 2019");
 
     // bar chart
     svg
@@ -104,6 +116,7 @@ const BarChart = () => {
           .text(value)
           .attr("text-anchor", "middle")
           .transition()
+          .attr("font-size", 18)
           .style("opacity", 2);
       })
 
@@ -111,7 +124,7 @@ const BarChart = () => {
         svg
           .select(".tooltip")
           .text(value)
-          .attr("x", event.offsetX + 20 + "px")
+          .attr("x", event.offsetX + 50 + "px")
           .attr("y", event.offsetY - 1 + "px");
       })
 
@@ -121,17 +134,78 @@ const BarChart = () => {
       .attr("fill", colorScale)
       .attr("height", (value) => 300 - yScale(value));
   }, [data]);
+
+  const handleMonthSelector = (event) => {
+    setMonthSelector(event.target.value);
+    setIsYearSelected(false);
+    setYearSelector("None");
+    if (months.includes(event.target.value)) {
+      console.log(months.indexOf(event.target.value) + 1);
+      let month = months.indexOf(event.target.value) + 1;
+      const body = {
+        csv: "daily.csv",
+        month: month,
+      };
+      axios.post("/csv/barChart/month", body).then((res) => {
+        console.log(res.data);
+        setxValues(res.data["xValues"]);
+        setData(res.data["yValues"]);
+      });
+    }
+  };
+
+  const handleYearSelector = (event) => {
+    setYearSelector(event.target.value);
+    setMonthSelector("None");
+    if (!isYearSelected) {
+      fetchAPIYear();
+    }
+  };
+
   return (
-    <div className="d-flex justify-content-center mt-4 pt-4">
-      <svg
-        ref={svgRef}
-        style={{ width: "600px", height: "300px", overflow: "visible" }}
-      >
-        <g className="x-axis" />
-        <g className="y-axis" />
-        <g className="y-title" />
-        <g className="x-title" />
-      </svg>
+    <div className="bar-main d-flex flex-column justify-content-center align-items-center mt-4 pt-4">
+      <div className="selector d-flex flex-row justify-content-end align-items-end">
+        <div className=" d-flex flex-column p-2">
+          {/* <div className="d-flex flex-column align-items-end justify-content-end"> */}
+          <InputLabel className="">Month</InputLabel>
+          <Select
+            label="Select"
+            value={monthSelector}
+            onChange={handleMonthSelector}
+            variant="outlined"
+          >
+            <MenuItem value="None">None</MenuItem>
+            {months.map((val, index) => (
+              <MenuItem value={val} key={index}>
+                {val}
+              </MenuItem>
+            ))}
+          </Select>
+        </div>
+        <div className="d-flex flex-column p-2">
+          <InputLabel className="">Year</InputLabel>
+          <Select
+            label="Select"
+            value={yearSelector}
+            onChange={handleYearSelector}
+            variant="outlined"
+          >
+            <MenuItem value="None">None</MenuItem>
+            <MenuItem value="2019">2019</MenuItem>
+          </Select>
+        </div>
+      </div>
+      <div className="d-flex mt-4 w-100 justify-content-center">
+        <svg
+          ref={svgRef}
+          style={{ width: "600px", height: "300px", overflow: "visible" }}
+        >
+          <g className="x-axis" />
+          <g className="y-axis" />
+          <g className="y-title" />
+          <g className="x-title" />
+        </svg>
+      </div>
     </div>
   );
 };

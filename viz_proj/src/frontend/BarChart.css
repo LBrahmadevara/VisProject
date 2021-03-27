@@ -3,9 +3,39 @@
 }
 
 .x-axis{
-    font-size: medium;
+    font-size: small;
 }
 
 .y-axis{
     font-size: small;
+}
+
+.y-title{
+    font-family: inherit;
+    font-size: medium;
+    
+}
+
+.tooltip{
+    font-size: large;
+}
+
+.selector{
+    min-width: 43.75rem !important;
+    max-width: 43.75rem !important;
+    
+}
+
+.MuiInputBase-root{
+    max-height: 1.875rem;
+}
+
+.MuiFormLabel-root{
+    padding-bottom: 0.8rem !important;
+    padding-right: 1rem !important;
+}
+
+.bar-main{
+    padding-bottom: 4.375rem;
+    background-color: antiquewhite;
 }

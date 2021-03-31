@@ -103,7 +103,7 @@ const BarChart = () => {
       .attr("x", 200)
       .attr("y", 20)
       .attr("transform", "translate(250,350) rotate(0)")
-      .text("San Diego (Year 2019)");
+      .text("San Diego");
 
     // bar chart
     svg

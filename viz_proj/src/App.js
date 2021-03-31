@@ -1,4 +1,4 @@
-import BarChart from "./frontend/BarChart";
+import BarChart from "./frontend/BarChart/BarChart";
 import "./App.css";
 
 const App = () => {

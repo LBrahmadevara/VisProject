@@ -1,5 +1,5 @@
 .bar:hover{
-    fill: rgb(206, 197, 71);
+    fill: rgb(255, 166, 0);
 }
 
 .x-axis{
@@ -13,7 +13,6 @@
 .y-title{
     font-family: inherit;
     font-size: medium;
-    
 }
 
 .tooltip{
@@ -21,8 +20,9 @@
 }
 
 .selector{
-    min-width: 43.75rem !important;
-    max-width: 43.75rem !important;
+    min-width: 62.5rem !important;
+    max-width: 62.5rem !important;
+    padding-bottom: 2rem;
     
 }
 
@@ -36,6 +36,10 @@
 }
 
 .bar-main{
-    padding-bottom: 4.375rem;
-    background-color: antiquewhite;
+    padding-bottom: 5.5rem;
+    background-color: beige;
+    width: 75rem;
+    /* border-radius: 100px 20px; */
+    border-radius: 25px;
+    padding-left: 2.5rem;
 }

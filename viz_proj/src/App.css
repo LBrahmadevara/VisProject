@@ -1,3 +1,13 @@
 .title{
-  font-weight: bold;
+  font-weight:bold;
+  font-size: xxx-large;
+  /* text-shadow: 3px 3px lightgray; */
 }
+
+.main{
+  /* background-color: antiquewhite; */
+  background-color: rgb(190, 190, 141);
+  height: 100vh;
+  padding-top: 2rem;
+}
+

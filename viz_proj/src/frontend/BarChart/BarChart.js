@@ -36,7 +36,7 @@ const BarChart = () => {
       csv: "monthly_updated.csv",
     };
     await axios.post("/csv/barChart/year", body).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setIsYearSelected(false);
       setxValues(res.data["xValues"]);
       setData(res.data["yValues"]);

@@ -6,8 +6,8 @@
 
 .main{
   /* background-color: antiquewhite; */
+  min-height: 100vh;
   background-color: rgb(190, 190, 141);
-  height: 100vh;
   padding-top: 2rem;
 }
 

@@ -7,10 +7,9 @@ import { MenuItem, Select, InputLabel } from "@material-ui/core";
 const PieChartValues = () => {
   const [data, setData] = useState([]);
   const [totalAvailabilites, setTotalAvailabilites] = useState(0);
-  const [locSelector, setLocSelector] = useState("San Francisco");
+  const [locSelector, setLocSelector] = useState("San Diego");
   const [monthSelector, setMonthSelector] = useState("All");
   const [isYearSelected, setIsYearSelected] = useState(true);
-  const [isMonthSelected, setIsMonthSelected] = useState(false);
 
   const location = ["San Diego", "San Francisco"];
   const months = [
@@ -31,7 +30,8 @@ const PieChartValues = () => {
   const fetchData = () => {
     const body = {
       csv: "room_type.csv",
-      loc: "San Francisco",
+      loc: "San Diego",
+      mon: "All",
     };
     axios.post("/csv/pieChart/location", body).then((res) => {
       setTotalAvailabilites(res.data.totalAvailabilites);
@@ -47,32 +47,53 @@ const PieChartValues = () => {
   }, [data]);
 
   const handleLocSelector = (event) => {
-    if (event.target.value === "San Diego") {
+    if (event.target.value === "San Francisco") {
       const body = {
         csv: "room_type.csv",
-        loc: "San Diego",
+        loc: "San Francisco",
+        mon: "All",
       };
       axios.post("/csv/pieChart/location", body).then((res) => {
+        console.log(res.data.pieData);
         setTotalAvailabilites(res.data.totalAvailabilites);
         setIsYearSelected(false);
         setLocSelector(event.target.value);
         setData(res.data.pieData);
       });
-    }
-    else{
+    } else {
       setLocSelector(event.target.value);
-      fetchData()
+      fetchData();
     }
   };
 
   const handleMonthSelector = (event) => {
-    setMonthSelector(event.target.value);
+    let body = {};
+    if (event.target.value === "All") {
+      body = {
+        csv: "room_type.csv",
+        loc: locSelector,
+        mon: event.target.value,
+      };
+    } else {
+      body = {
+        csv: "room_type_per_month.csv",
+        loc: locSelector,
+        mon: event.target.value,
+      };
+    }
+    axios.post("/csv/pieChart/location", body).then((res) => {
+      console.log(res.data);
+      setTotalAvailabilites(res.data.totalAvailabilites);
+      setIsYearSelected(false);
+      setMonthSelector(event.target.value);
+      setData(res.data.pieData);
+    });
   };
 
   return (
     <div className="pie-main d-flex flex-column justify-content-center align-items-center">
-      <div className="d-flex">
-        <div>
+      <div className="selector d-flex flex-row justify-content-end align-items-end">
+        <div className="p-2">
           <InputLabel className="">Location</InputLabel>
           <Select
             label="Select"
@@ -87,7 +108,7 @@ const PieChartValues = () => {
             ))}
           </Select>
         </div>
-        <div>
+        <div className="p-2">
           <InputLabel className="">Month</InputLabel>
           <Select
             label="Select"
@@ -97,13 +118,14 @@ const PieChartValues = () => {
           >
             <MenuItem value="All">All</MenuItem>
             {months.map((val, index) => (
-              <MenuItem value={val} key={index}>
+              <MenuItem value={index} key={index}>
                 {val}
               </MenuItem>
             ))}
           </Select>
         </div>
       </div>
+      {data.length !== 0 && console.log(data)}
       {data.length !== 0 && (
         <PieChartTemplate
           values={data}

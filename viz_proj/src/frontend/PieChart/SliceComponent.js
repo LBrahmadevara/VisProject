@@ -35,7 +35,7 @@ const SliceComponent = (props) => {
     return a > 90 ? a - 180 : a;
   };
 
-  const outerRadius = 150;
+  const outerRadius = 180;
   const innerRadius = outerRadius / 2;
 
   const { index, value, label, fill, dataValue, totalAvailabilites } = props;
@@ -105,7 +105,7 @@ const SliceComponent = (props) => {
             {label}{" "}
           </tspan>
           <tspan dy="1em" x="0.3em">
-            {Math.round((dataValue / totalAvailabilites) * 100)}%
+            {dataValue}{" "}({Math.round((dataValue / totalAvailabilites) * 100)}%)
           </tspan>
         </text>
       )}

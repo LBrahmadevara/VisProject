@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { schemeCategory10, scaleOrdinal } from "d3";
 import * as d3 from "d3";
 import SliceComponent from "./SliceComponent";
+import "./PieChart.css"
 
 const PieChartTemplate = (props) => {
   const [data, setData] = useState([]);
@@ -35,9 +36,9 @@ const PieChartTemplate = (props) => {
   };
 
   return (
-    <div>
-      <svg height={height} width={width}>
-        <g transform={`translate(${150},${200})`}>
+    <div className="d-flex justify-content-center" style={{width: 900, height:300}}>
+      <svg height={height} width={width} className="d-flex justify-content-center">
+        <g className="" transform={`translate(${200},${200})`}>
           {pieChart(availabilities).map(renderSlice)}
         </g>
       </svg>

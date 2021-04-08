@@ -3,7 +3,12 @@
     padding-bottom: 5.5rem;
     background-color: beige;
     width: 75rem;
-    /* border-radius: 100px 20px; */
     border-radius: 25px;
     padding-left: 2.5rem;
+}
+
+.selector{
+    min-width: 62.5rem !important;
+    max-width: 62.5rem !important;
+    padding-bottom: 0rem !important;
 }

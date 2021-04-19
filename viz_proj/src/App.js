@@ -1,7 +1,7 @@
 import BarChart from "./frontend/BarChart/BarChart";
 import "./App.css";
 import PieChartValues from "./frontend/PieChart/PieChartValues";
-import LineChartTemplate from "./frontend/LineChart/LineChartTemplate";
+import LineChartValues from "./frontend/LineChart/LineChartValues";
 
 const App = () => {
   return (
@@ -9,14 +9,14 @@ const App = () => {
       <div className="title-div d-flex justify-content-center align-items-center">
         <h1 className="title mt-4 mb-4 pd-4 ">When to Travel??</h1>
       </div>
-      {/* <div className="d-flex justify-content-center">
-        <BarChart />
-      </div> */}
-      {/* <div className="d-flex justify-content-center" style={{minHeight: '600px'}}>
-        <PieChartValues />
-      </div> */}
       <div className="d-flex justify-content-center">
-        <LineChartTemplate />
+        <BarChart />
+      </div>
+      <div className="d-flex justify-content-center" style={{minHeight: '600px'}}>
+        <PieChartValues />
+      </div>
+      <div className="d-flex justify-content-center">
+        <LineChartValues />
       </div>
     </div>
   );

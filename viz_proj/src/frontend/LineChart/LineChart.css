@@ -1,19 +1,32 @@
 svg {
-    font-family: Sans-Serif, Arial;
-  }
-  .line {
-    stroke-width: 2;
-    fill: none;
-  }
-  
-  .axis path {
-    stroke: black;
-  }
-  
-  .text {
-    font-size: 12px;
-  }
-  
-  .title-text {
-    font-size: 18px;
-  }
+  font-family: Sans-Serif, Arial;
+}
+.line {
+  stroke-width: 2;
+  fill: none;
+}
+
+.axis path {
+  stroke: black;
+}
+
+.text {
+  font-size: 12px;
+}
+
+.title-text {
+  font-size: 18px;
+}
+
+.line-main {
+  padding-bottom: 5.5rem;
+  background-color: beige;
+  width: 75rem;
+  /* border-radius: 100px 20px; */
+  border-radius: 25px;
+  padding-left: 2.5rem;
+}
+
+#chart{
+  padding-top: 40px;
+}

@@ -1,62 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import ReactDOM from "react-dom";
 import * as d3 from "d3";
 import { scaleBand, select, scaleLinear } from "d3";
 import "./LineChart.css";
 
-const LineChartTemplate = () => {
-  const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "June",
-    "July",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ];
-  const cities = ["USA", "Canada"];
-  console.log(cities.indexOf("USA"));
-  const [data, setData] = useState([
-    {
-      name: "USA",
-      values: [
-        { date: "Jan", price: "100" },
-        { date: "Feb", price: "110" },
-        { date: "Mar", price: "145" },
-        { date: "Apr", price: "241" },
-        { date: "May", price: "101" },
-        { date: "June", price: "90" },
-        { date: "July", price: "10" },
-        { date: "Aug", price: "35" },
-        { date: "Sep", price: "21" },
-        { date: "Oct", price: "201" },
-        { date: "Nov", price: "60" },
-        { date: "Dec", price: "101" },
-      ],
-    },
-    {
-      name: "Canada",
-      values: [
-        { date: "Jan", price: "200" },
-        { date: "Feb", price: "120" },
-        { date: "Mar", price: "33" },
-        { date: "Apr", price: "21" },
-        { date: "May", price: "51" },
-        { date: "June", price: "190" },
-        { date: "July", price: "120" },
-        { date: "Aug", price: "85" },
-        { date: "Sep", price: "221" },
-        { date: "Oct", price: "101" },
-        { date: "Nov", price: "200" },
-        { date: "Dec", price: "120" },
-      ],
-    },
-  ]);
+const LineChartTemplate = (props) => {
+  const { cities, months } = props;
+  const [data, setData] = useState(props.data);
 
   let width = 1000;
   let height = 400;
@@ -75,37 +24,37 @@ const LineChartTemplate = () => {
   let circleRadiusHover = 6;
 
   const svgRef = useRef();
-
   useEffect(() => {
     const svg = select(svgRef.current);
     /* Format Data */
     data.forEach(function (d) {
       d.values.forEach(function (d) {
-        d.price = +d.price;
+        d.Availability = +d.Availability;
       });
     });
-
 
     const xScale = scaleBand()
       .domain(months.map((val, index) => val))
       .range([0, 1000])
       .padding(1);
 
-    const xScale1 = scaleBand()
-      .domain(months.map((val, index) => index))
-      .range([0, 1000])
-      .padding(0.5);
+    // const xScale1 = scaleBand()
+    //   .domain(months.map((val, index) => index))
+    //   .range([0, 1000])
+    //   .padding(0.5);
 
     let yScale = d3
       .scaleLinear()
-      .domain([0, d3.max(data[0].values, (d) => d.price)])
+      .domain([0, d3.max(data[0].values, (d) => d.Availability) + 15000])
       .range([height - margin, 0]);
 
-    let color = d3.scaleOrdinal(d3.schemeCategory10);
+    // let color = d3.scaleOrdinal(d3.schemeCategory10);
 
-    const colorScale = scaleLinear().domain([0, 1]).range(["blue", "brown"]);
+    const colorScale = scaleLinear()
+      .domain([0, 1])
+      .range(["rgb(101 52 6)", "rgb(239 123 11)"]);
 
-    console.log(colorScale(0));
+    // console.log(colorScale(0));
 
     /* Add Axis into SVG */
     let xAxis = d3.axisBottom(xScale).ticks(data.length);
@@ -114,11 +63,31 @@ const LineChartTemplate = () => {
     svg.select(".x-axis").style("transform", `translateY(350px)`).call(xAxis);
     svg.select(".y-axis").call(yAxis);
 
+    // Axis titles
+    svg
+      .select(".y-title")
+      .append("text")
+      .attr("font-family", "inherit")
+      .attr("x", -10)
+      .attr("y", -1)
+      .attr("transform", "translate(-60,250) rotate(270)")
+      .text("Number of Availabilities");
+
+    svg
+      .select(".x-title")
+      .append("text")
+      .attr("font-family", "inherit")
+      .attr("font-size", 16)
+      .attr("x", 200)
+      .attr("y", 60)
+      .attr("transform", "translate(250,350) rotate(0)")
+      .text("San Diego");
+
     //   /* Add line into SVG */
     let line = d3
       .line()
-      .x((d) => xScale(d.date))
-      .y((d) => yScale(d.price));
+      .x((d) => xScale(d.Month))
+      .y((d) => yScale(d.Availability));
 
     let lines = svg.append("g").attr("class", "lines");
 
@@ -134,8 +103,8 @@ const LineChartTemplate = () => {
           .data([data])
           .join((enter) => enter.append("text"))
           .attr("class", "title-text")
-          .text(i.name)
-          .style("fill", colorScale(cities.indexOf(i.name)))
+          .text(i.city)
+          .style("fill", colorScale(cities.indexOf(i.city)))
           .attr("text-anchor", "middle")
           .attr("x", width - margin)
           .attr("y", 5);
@@ -176,13 +145,13 @@ const LineChartTemplate = () => {
       .append("g")
       .attr("class", "circle")
       .on("mouseenter", function (d, i) {
-        console.log(i);
+        // console.log(i);
         svg
           .selectAll(".circle-text")
           .data([data])
           .join((enter) => enter.append("text"))
           .attr("class", "circle-text")
-          .text(`${i.price}`)
+          .text(`${i.Availability}`)
           .attr("x", d["offsetX"] + 15)
           .attr("y", d["offsetY"] - 10);
         d3.select(this).style("cursor", "pointer");
@@ -192,8 +161,8 @@ const LineChartTemplate = () => {
         d3.select(this).style("cursor", "none");
       })
       .append("circle")
-      .attr("cx", (d) => xScale(d.date))
-      .attr("cy", (d) => yScale(d.price))
+      .attr("cx", (d) => xScale(d.Month))
+      .attr("cy", (d) => yScale(d.Availability))
       .attr("r", circleRadius)
       .style("opacity", circleOpacity)
       .on("mouseenter", function (d) {
@@ -208,17 +177,19 @@ const LineChartTemplate = () => {
   }, [data]);
 
   return (
-    <div className="justify-content-center">
-      <svg
-        id="chart"
-        ref={svgRef}
-        style={{ width: `1000px`, height: `400px`, overflow: "visible" }}
-      >
-        <g className="x-axis" />
-        <g className="y-axis" />
-        {/* <g className="line-group" /> */}
-      </svg>
-    </div>
+    // <div className="justify-content-center">
+    <svg
+      id="chart"
+      ref={svgRef}
+      style={{ width: `1000px`, height: `400px`, overflow: "visible" }}
+    >
+      <g className="x-axis" />
+      <g className="y-axis" />
+      <g className="y-title" />
+      <g className="x-title" />
+      {/* <g className="line-group" /> */}
+    </svg>
+    // </div>
   );
 };
 

@@ -54,8 +54,6 @@ const LineChartTemplate = (props) => {
       .domain([0, 1])
       .range(["rgb(101 52 6)", "rgb(239 123 11)"]);
 
-    // console.log(colorScale(0));
-
     /* Add Axis into SVG */
     let xAxis = d3.axisBottom(xScale).ticks(data.length);
     let yAxis = d3.axisLeft(yScale).ticks(5);
@@ -177,19 +175,34 @@ const LineChartTemplate = (props) => {
   }, [data]);
 
   return (
-    // <div className="justify-content-center">
-    <svg
-      id="chart"
-      ref={svgRef}
-      style={{ width: `1000px`, height: `400px`, overflow: "visible" }}
-    >
-      <g className="x-axis" />
-      <g className="y-axis" />
-      <g className="y-title" />
-      <g className="x-title" />
-      {/* <g className="line-group" /> */}
-    </svg>
-    // </div>
+    <div className="justify-content-center">
+      <svg
+        id="chart"
+        ref={svgRef}
+        style={{ width: `1000px`, height: `400px`, overflow: "visible" }}
+      >
+        <g className="x-axis" />
+        <g className="y-axis" />
+        <g className="y-title" />
+        {/* <g className="x-title" /> */}
+        {/* <g className="x-title" > 
+        <div>Hi</div>
+      </g> */}
+        {/* <g className="line-group" /> */}
+      </svg>
+      <div className="xTitle d-flex justify-content-center">
+        <div
+          className="circle d-flex"
+          style={{ backgroundColor: "rgb(101 52 6)" }}
+        ></div>
+        <div className="">San Francisco</div>
+        <div
+          className="circle d-flex"
+          style={{ backgroundColor: "rgb(239 123 11)", marginLeft: "0.75rem" }}
+        ></div>
+        <div className="">San Diego</div>
+      </div>
+    </div>
   );
 };
 

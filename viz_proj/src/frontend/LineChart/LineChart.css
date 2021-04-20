@@ -19,7 +19,7 @@ svg {
 }
 
 .line-main {
-  padding-bottom: 5.5rem;
+  padding-bottom: 2.5rem;
   background-color: beige;
   width: 75rem;
   /* border-radius: 100px 20px; */
@@ -28,5 +28,21 @@ svg {
 }
 
 #chart{
-  padding-top: 40px;
+  padding-top: 2.5rem;
+}
+
+.xTitle{
+  margin-top: 2.75rem !important;
+}
+
+
+.circle{
+  min-width: 0.938rem;
+  max-width: 0.938rem;
+  min-height: 0.938rem;
+  max-height: 0.938rem;
+  border-radius: 50%;
+  margin-right: 0.313rem;
+  margin-top: 0.25rem;
+  /* background-color: rgb(101 52 6); */
 }

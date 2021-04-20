@@ -39,7 +39,7 @@ const LineChartValues = () => {
   }, [data]);
 
   return (
-    <div className="line-main d-flex justify-content-center align-items-center mt-4 pt-4">
+    <div className="line-main d-flex flex-column justify-content-center align-items-center mt-4 pt-4">
       {data.length > 0 && (
         <LineChartTemplate months={months} data={data} cities={cities} />
       )}

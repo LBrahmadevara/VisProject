@@ -1,0 +1,48 @@
+svg {
+  font-family: Sans-Serif, Arial;
+}
+.line {
+  stroke-width: 2;
+  fill: none;
+}
+
+.axis path {
+  stroke: black;
+}
+
+.text {
+  font-size: 12px;
+}
+
+.title-text {
+  font-size: 18px;
+}
+
+.line-main {
+  padding-bottom: 2.5rem;
+  background-color: beige;
+  width: 75rem;
+  /* border-radius: 100px 20px; */
+  border-radius: 25px;
+  padding-left: 2.5rem;
+}
+
+#chart{
+  padding-top: 2.5rem;
+}
+
+.xTitle{
+  margin-top: 2.75rem !important;
+}
+
+
+.circle{
+  min-width: 0.938rem;
+  max-width: 0.938rem;
+  min-height: 0.938rem;
+  max-height: 0.938rem;
+  border-radius: 50%;
+  margin-right: 0.313rem;
+  margin-top: 0.25rem;
+  /* background-color: rgb(101 52 6); */
+}

@@ -8,9 +8,11 @@ let x = [];
 let y = [];
 let pieData = [];
 let total_availabilites = 0;
+let lineData = [];
 
 app.use(express.json());
 
+// Logic for Bar Chart
 app.post("/csv/barChart/year", (req, res) => {
   fs.createReadStream(`../files/${req.body["csv"]}`)
     .pipe(csv())
@@ -58,7 +60,6 @@ app.post("/csv/barChart/month", (req, res) => {
     });
 });
 
-
 // logic for Pie chart
 app.post("/csv/pieChart/location", (req, res) => {
   let csv_file = req.body["csv"];
@@ -105,12 +106,54 @@ app.post("/csv/pieChart/location", (req, res) => {
           pieData.push(dict);
         });
         res.send({ pieData: pieData, totalAvailabilites: total_availabilites });
-        console.log("CSV file successfully processed and sent to frontend");
+        console.log("Pie Data processed and sent to frontend");
         final_data = {};
         total_availabilites = 0;
         pieData = [];
       });
   }
+});
+
+// Logic for Line Chart
+app.post("/csv/lineChart", (req, res) => {
+  let sd = [];
+  let sf = [];
+  let data = {};
+  fs.createReadStream(`../files/${req.body["csv"]}`)
+    .pipe(csv())
+    .on("data", (row) => {
+      let sfValues = {};
+      let sdValues = {};
+      Object.entries(row).forEach(([key, value]) => {
+        if (key.trim() == "Month") {
+          sfValues["Month"] = value;
+          sdValues["Month"] = value;
+        }
+        if (key.trim() === "San Francisco") {
+          sfValues["Availability"] = value;
+          sf.push(sfValues);
+        }
+        if (key.trim() === "San Diego") {
+          sdValues["Availability"] = value;
+          sd.push(sdValues);
+        }
+      });
+    })
+    .on("end", () => {
+      data["city"] = "San Francisco";
+      data["values"] = sf;
+      lineData.push(data);
+      data = {};
+      data["city"] = "San Diego";
+      data["values"] = sd;
+      lineData.push(data);
+      res.send({ lineData: lineData });
+      console.log("Line Data processed and sent to frontend");
+      sd = [];
+      sf = [];
+      data = {};
+      lineData = [];
+    });
 });
 
 app.listen(port);

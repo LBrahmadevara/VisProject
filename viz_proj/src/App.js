@@ -1,6 +1,7 @@
 import BarChart from "./frontend/BarChart/BarChart";
 import "./App.css";
 import PieChartValues from "./frontend/PieChart/PieChartValues";
+import LineChartValues from "./frontend/LineChart/LineChartValues";
 
 const App = () => {
   return (
@@ -13,6 +14,9 @@ const App = () => {
       </div>
       <div className="d-flex justify-content-center" style={{minHeight: '600px'}}>
         <PieChartValues />
+      </div>
+      <div className="d-flex justify-content-center">
+        <LineChartValues />
       </div>
     </div>
   );

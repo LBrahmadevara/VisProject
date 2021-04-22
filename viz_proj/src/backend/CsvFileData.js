@@ -9,6 +9,7 @@ let y = [];
 let pieData = [];
 let total_availabilites = 0;
 let lineData = [];
+let groupedColData = [];
 
 app.use(express.json());
 
@@ -155,5 +156,29 @@ app.post("/csv/lineChart", (req, res) => {
       lineData = [];
     });
 });
+
+
+// logic for Grouped Column Bar Chart
+app.post("/csv/groupCol", (req, res) => {
+  fs.createReadStream(`../files/${req.body["loc"]}/${req.body["csv"]}`)
+  .pipe(csv())
+  .on("data", (row) => {
+    let dic = {};
+    Object.entries(row).forEach(([key, value]) => {
+      if (key.trim() === "Month") {
+        dic[key.trim()] = value;
+      } else {
+        dic[key] = parseFloat(value);
+      }
+    });
+    groupedColData.push(dic);
+  })
+  .on("end", () => {
+    res.send({data: groupedColData})
+    console.log("Line Data processed and sent to frontend");
+    groupedColData = [];
+  });
+
+})
 
 app.listen(port);

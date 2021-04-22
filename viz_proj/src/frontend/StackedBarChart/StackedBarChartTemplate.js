@@ -12,7 +12,6 @@ import {
 
 const StackedBarChartTemplate = ({ data, keys, colors }) => {
   const svgRef = useRef();
-  console.log(data);
 
   useEffect(() => {
     const svg = select(svgRef.current);
@@ -20,7 +19,6 @@ const StackedBarChartTemplate = ({ data, keys, colors }) => {
     // Stacks / layers
     const stackGenerator = stack().keys(keys).order(stackOrderAscending);
     const layers = stackGenerator(data);
-    console.log(layers);
     const extent = [
       0,
       max(layers, (layer) => max(layer, (sequence) => sequence[1])) + 500,

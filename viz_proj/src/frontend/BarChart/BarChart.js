@@ -208,7 +208,12 @@ const BarChart = () => {
   };
 
   return (
-    <div className="bar-main d-flex flex-column justify-content-center align-items-center mt-4 pt-4">
+    <div className="bar-main d-flex flex-column justify-content-center align-items-center mt-4">
+      <div className="selector d-flex justify-content-start align-items-start">
+        <h5 className="bar-title p-4">Most Availability for San Diego in a year</h5>
+        <h5></h5>
+        
+      </div>
       <div className="selector d-flex flex-row justify-content-end align-items-end">
         <div className=" d-flex flex-column p-2">
           <InputLabel className="">Month</InputLabel>

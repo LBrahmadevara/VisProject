@@ -10,12 +10,13 @@ const BarChart = () => {
   const [data, setData] = useState([]);
   // xValues => x-axis values
   const [xValues, setxValues] = useState([]);
-  const [monthSelector, setMonthSelector] = useState("None");
+  const [monthSelector, setMonthSelector] = useState("All Months");
   const [yearSelector, setYearSelector] = useState("2019");
   const svgRef = useRef();
   const maxVal = d3.max(data);
   const [isYearSelected, setIsYearSelected] = useState(true);
   const [isMonthSelected, setIsMonthSelected] = useState(false);
+  const [isEmptyGraph, setIsEmptyGraph] = useState(false);
   const months = [
     "Jan",
     "Feb",
@@ -48,6 +49,12 @@ const BarChart = () => {
     if (isYearSelected) {
       fetchAPIYear();
     }
+
+    const hoverText = d3
+      .select("body")
+      .append("div")
+      .attr("class", "hoverText");
+
     // Axis Scaling
     const xScale = scaleBand()
       .domain(xValues.map((val, index) => val))
@@ -105,6 +112,20 @@ const BarChart = () => {
       .attr("transform", "translate(250,350) rotate(0)")
       .text("San Diego");
 
+    // if (yearSelector !== "2019") {
+    //   svg
+    //     .selectAll(".emptyText")
+    //     .data(["value"])
+    //     .join((enter) => enter.append("text"))
+    //     .attr("class", "emptyText")
+    //     .text(isEmptyGraph ? "data not available" : "                   ")
+    //     .attr("x", "450px")
+    //     .attr("y", "150px")
+    //     .transition()
+    //     .attr("font-size", 18)
+    //     .style("opacity", 2);
+    // }
+
     // bar chart
     svg
       .selectAll(".bar")
@@ -117,29 +138,16 @@ const BarChart = () => {
       .attr("y", -300)
       .attr("width", xScale.bandwidth())
 
-      // events handling
-      .on("mouseenter", (event, value) => {
-        svg
-          .selectAll(".tooltip")
-          .data([value])
-          .join((enter) => enter.append("text"))
-          .attr("class", "tooltip")
-          .text(value)
-          .attr("text-anchor", "middle")
-          .transition()
-          .attr("font-size", 18)
-          .style("opacity", 2);
+      .on("mousemove", function (event, value) {
+        hoverText
+          .style("left", event.pageX + 20 + "px")
+          .style("top", event.pageY - 60 + "px")
+          .style("display", "inline-block")
+          .html(`Availabilities: ${value}`);
       })
-
-      .on("mousemove", (event, value) => {
-        svg
-          .select(".tooltip")
-          .text(value)
-          .attr("x", event.offsetX + 50 + "px")
-          .attr("y", event.offsetY - 1 + "px");
+      .on("mouseout", function (d) {
+        hoverText.style("display", "none");
       })
-
-      .on("mouseleave", () => svg.select(".tooltip").remove())
 
       .transition()
       .attr("fill", colorScale)
@@ -148,30 +156,54 @@ const BarChart = () => {
 
   const handleMonthSelector = (event) => {
     setMonthSelector(event.target.value);
-    setIsMonthSelected(true);
-    setIsYearSelected(false);
-    setYearSelector("None");
-    if (months.includes(event.target.value)) {
-      console.log(months.indexOf(event.target.value) + 1);
-      let month = months.indexOf(event.target.value) + 1;
-      const body = {
-        csv: "daily.csv",
-        month: month,
-      };
-      axios.post("/csv/barChart/month", body).then((res) => {
-        console.log(res.data);
-        setxValues(res.data["xValues"]);
-        setData(res.data["yValues"]);
-      });
+    if (yearSelector === "2019") {
+      if (months.includes(event.target.value)) {
+        let month = months.indexOf(event.target.value) + 1;
+        const body = {
+          csv: "daily.csv",
+          month: month,
+        };
+        axios.post("/csv/barChart/month", body).then((res) => {
+          setIsMonthSelected(true);
+          setxValues(res.data["xValues"]);
+          setData(res.data["yValues"]);
+        });
+      }
+      if (event.target.value === "All Months") {
+        setIsMonthSelected(false);
+        fetchAPIYear();
+      }
+    } else {
+      setxValues([]);
+      setData([]);
     }
   };
 
   const handleYearSelector = (event) => {
-    setYearSelector(event.target.value);
     setIsMonthSelected(false);
-    setMonthSelector("None");
-    if (!isYearSelected) {
-      fetchAPIYear();
+    setYearSelector(event.target.value);
+    if (event.target.value === "2019") {
+      // console.log(monthSelector)
+      setIsEmptyGraph(false);
+      if (monthSelector !== "All Months") {
+        let month = months.indexOf(monthSelector) + 1;
+        const body = {
+          csv: "daily.csv",
+          month: month,
+        };
+        axios.post("/csv/barChart/month", body).then((res) => {
+          setIsMonthSelected(true);
+          setxValues(res.data["xValues"]);
+          setData(res.data["yValues"]);
+        });
+      } else {
+        fetchAPIYear();
+      }
+    } else {
+      setIsEmptyGraph(true);
+      setIsYearSelected(false);
+      setxValues([]);
+      setData([]);
     }
   };
 
@@ -186,7 +218,7 @@ const BarChart = () => {
             onChange={handleMonthSelector}
             variant="outlined"
           >
-            <MenuItem value="None">None</MenuItem>
+            <MenuItem value="All Months">All Months</MenuItem>
             {months.map((val, index) => (
               <MenuItem value={val} key={index}>
                 {val}
@@ -202,21 +234,32 @@ const BarChart = () => {
             onChange={handleYearSelector}
             variant="outlined"
           >
-            <MenuItem value="None">None</MenuItem>
+            {/* <MenuItem value="None">None</MenuItem> */}
             <MenuItem value="2019">2019</MenuItem>
+            <MenuItem value="2020">2020</MenuItem>
+            <MenuItem value="2021">2021</MenuItem>
           </Select>
         </div>
       </div>
       <div className="d-flex mt-4 w-100 justify-content-center">
-        <svg
-          ref={svgRef}
-          style={{ width: "1000px", height: "300px", overflow: "visible" }}
-        >
-          <g className="x-axis" />
-          <g className="y-axis" />
-          <g className="y-title" />
-          <g className="x-title" />
-        </svg>
+        {!isEmptyGraph ? (
+          <svg
+            ref={svgRef}
+            style={{ width: "1000px", height: "300px", overflow: "visible" }}
+          >
+            <g className="x-axis" />
+            <g className="y-axis" />
+            <g className="y-title" />
+            <g className="x-title" />
+          </svg>
+        ) : (
+          <div
+            style={{ width: "1000px", height: "300px", overflow: "visible" }}
+            className="d-flex justify-content-center align-items-center"
+          >
+            data not available
+          </div>
+        )}
       </div>
     </div>
   );

@@ -7,7 +7,6 @@ const GroupedBarChartTemplate = ({ data, keys, colors }) => {
     const svg = select(svgRef.current);
 
     const extent = [0, max(data, (dict) => max(keys, (i) => dict[i]))];
-    console.log(extent);
 
     //Scaling
     const xScale0 = scaleBand()

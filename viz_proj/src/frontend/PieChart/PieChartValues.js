@@ -54,7 +54,7 @@ const PieChartValues = () => {
         mon: "All",
       };
       axios.post("/csv/pieChart/location", body).then((res) => {
-        console.log(res.data.pieData);
+        // console.log(res.data.pieData);
         setTotalAvailabilites(res.data.totalAvailabilites);
         setIsYearSelected(false);
         setLocSelector(event.target.value);
@@ -82,7 +82,7 @@ const PieChartValues = () => {
       };
     }
     axios.post("/csv/pieChart/location", body).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setTotalAvailabilites(res.data.totalAvailabilites);
       setIsYearSelected(false);
       setMonthSelector(event.target.value);

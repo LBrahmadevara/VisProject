@@ -36,9 +36,9 @@ const GroupedBarChartValues = () => {
       fetchData();
     }
 
-    if (data.length !== 0){
-        console.log(data)
-    }
+    // if (data.length !== 0){
+    //     console.log(data)
+    // }
   }, [data]);
 
   const handleLocSelector = (event) => {

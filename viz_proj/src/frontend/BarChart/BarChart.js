@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { select, scaleBand, scaleLinear, axisBottom, axisLeft } from "d3";
+import {
+  select,
+  scaleBand,
+  scaleLinear,
+  axisBottom,
+  axisLeft,
+  scaleOrdinal,
+} from "d3";
 import * as d3 from "d3";
 import "./BarChart.css";
 import axios from "axios";
@@ -13,10 +20,11 @@ const BarChart = () => {
   const [monthSelector, setMonthSelector] = useState("All Months");
   const [yearSelector, setYearSelector] = useState("2019");
   const svgRef = useRef();
-  const maxVal = d3.max(data);
   const [isYearSelected, setIsYearSelected] = useState(true);
   const [isMonthSelected, setIsMonthSelected] = useState(false);
   const [isEmptyGraph, setIsEmptyGraph] = useState(false);
+  const [availTotal, setAvailTotal] = useState([]);
+  const maxVal = d3.max(availTotal);
   const months = [
     "Jan",
     "Feb",
@@ -37,10 +45,10 @@ const BarChart = () => {
       csv: "monthly_updated.csv",
     };
     await axios.post("/csv/barChart/year", body).then((res) => {
-      // console.log(res.data);
       setIsYearSelected(false);
       setxValues(res.data["xValues"]);
-      setData(res.data["yValues"]);
+      setAvailTotal(res.data["yValues"]);
+      setData(res.data["values"]);
     });
   };
 
@@ -67,10 +75,12 @@ const BarChart = () => {
       .range([0, 1000])
       .padding(0.5);
 
-    const yScale = scaleLinear().domain([0, maxVal]).range([300, 0]);
+    const yScale = scaleLinear()
+      .domain([0, maxVal + 50])
+      .range([300, 0]);
 
     const colorScale = scaleLinear()
-      .domain([0, maxVal])
+      .domain([0, maxVal + 50])
       .range(["rgb(241, 201, 125)", "rgb(241, 201, 125)"]);
 
     const xAxis = axisBottom(xScale).ticks(data.length);
@@ -112,20 +122,6 @@ const BarChart = () => {
       .attr("transform", "translate(250,350) rotate(0)")
       .text("San Diego");
 
-    // if (yearSelector !== "2019") {
-    //   svg
-    //     .selectAll(".emptyText")
-    //     .data(["value"])
-    //     .join((enter) => enter.append("text"))
-    //     .attr("class", "emptyText")
-    //     .text(isEmptyGraph ? "data not available" : "                   ")
-    //     .attr("x", "450px")
-    //     .attr("y", "150px")
-    //     .transition()
-    //     .attr("font-size", 18)
-    //     .style("opacity", 2);
-    // }
-
     // bar chart
     svg
       .selectAll(".bar")
@@ -138,20 +134,28 @@ const BarChart = () => {
       .attr("y", -300)
       .attr("width", xScale.bandwidth())
 
-      .on("mousemove", function (event, value) {
+      .on("mousemove", (event, value) => {
         hoverText
           .style("left", event.pageX + 20 + "px")
           .style("top", event.pageY - 60 + "px")
           .style("display", "inline-block")
-          .html(`Availabilities: ${value}`);
+          .html(
+            `${data.length > 20 ? "Day" : "Month"}: ${value.Month}` +
+              "<br>" +
+              `Availabilities: ${value.Availability}`
+          );
       })
-      .on("mouseout", function (d) {
+      .on("mouseout", (d) => {
         hoverText.style("display", "none");
       })
 
       .transition()
-      .attr("fill", colorScale)
-      .attr("height", (value) => 300 - yScale(value));
+      .attr("fill", (d) => {
+        return colorScale(d.Availability);
+      })
+      .attr("height", (value) => {
+        return 300 - yScale(value.Availability);
+      });
   }, [data]);
 
   const handleMonthSelector = (event) => {
@@ -166,16 +170,14 @@ const BarChart = () => {
         axios.post("/csv/barChart/month", body).then((res) => {
           setIsMonthSelected(true);
           setxValues(res.data["xValues"]);
-          setData(res.data["yValues"]);
+          setAvailTotal(res.data["yValues"]);
+          setData(res.data["values"]);
         });
       }
       if (event.target.value === "All Months") {
         setIsMonthSelected(false);
         fetchAPIYear();
       }
-    } else {
-      setxValues([]);
-      setData([]);
     }
   };
 
@@ -183,7 +185,6 @@ const BarChart = () => {
     setIsMonthSelected(false);
     setYearSelector(event.target.value);
     if (event.target.value === "2019") {
-      // console.log(monthSelector)
       setIsEmptyGraph(false);
       if (monthSelector !== "All Months") {
         let month = months.indexOf(monthSelector) + 1;
@@ -194,7 +195,8 @@ const BarChart = () => {
         axios.post("/csv/barChart/month", body).then((res) => {
           setIsMonthSelected(true);
           setxValues(res.data["xValues"]);
-          setData(res.data["yValues"]);
+          setAvailTotal(res.data["yValues"]);
+          setData(res.data["values"]);
         });
       } else {
         fetchAPIYear();
@@ -202,8 +204,6 @@ const BarChart = () => {
     } else {
       setIsEmptyGraph(true);
       setIsYearSelected(false);
-      setxValues([]);
-      setData([]);
     }
   };
 

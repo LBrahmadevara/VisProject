@@ -141,7 +141,7 @@ const BarChart = () => {
           .html(
             `${data.length > 20 ? "Day" : "Month"}: ${value.Month}` +
               "<br>" +
-              `Availabilities: ${value.Availability}`
+              `Availability: ${value.Availability}`
           );
       })
       .on("mouseout", (d) => {
@@ -207,10 +207,10 @@ const BarChart = () => {
   };
 
   return (
-    <div className="bar-main d-flex flex-column justify-content-center align-items-center mt-4">
+    <div className="bar-main d-flex flex-column justify-content-center align-items-center mt-4 shadow">
       <div className="selector d-flex flex-row justify-content-between mb-4">
         <h5 className="bar-title p-4">
-          Most Availability for San Diego in a year
+          Availability trend for San Diego
         </h5>
         <div className="drop-down d-flex flex-row justify-content-end align-items-end">
           <div className="d-flex flex-column p-2">

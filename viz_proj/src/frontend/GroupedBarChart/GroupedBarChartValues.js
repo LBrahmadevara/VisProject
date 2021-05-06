@@ -53,10 +53,10 @@ const GroupedBarChartValues = () => {
     }
   };
   return (
-    <div className="groupBar-main d-flex flex-column mt-3">
+    <div className="groupBar-main d-flex flex-column mt-3 shadow">
       <div className="group-selector d-flex flex-row justify-content-between mb-4 ml-4">
         <h5 className="bar-title p-4">
-          Low, Average, Peak Prices in {locSelector}
+          Low, Average and Peak Prices in {locSelector}
         </h5>
         <div className="d-flex flex-row justify-content-end align-items-end pt-4">
           <div className="d-flex flex-column">

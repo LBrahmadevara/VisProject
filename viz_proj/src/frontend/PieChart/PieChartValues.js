@@ -91,7 +91,7 @@ const PieChartValues = () => {
   };
 
   return (
-    <div className="pie-main d-flex flex-column justify-content-center align-items-center">
+    <div className="pie-main d-flex flex-column justify-content-center align-items-center shadow">
       <div className="pie-selector d-flex flex-row justify-content-between mb-4">
         <h5 className="bar-title p-4">
           Most popular room type in {locSelector}
@@ -130,7 +130,6 @@ const PieChartValues = () => {
           </div>
         </div>
       </div>
-      {data.length !== 0 && console.log(data)}
       {data.length !== 0 && (
         <PieChartTemplate
           values={data}

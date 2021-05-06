@@ -21,7 +21,7 @@ const LineChartTemplate = (props) => {
   let circleOpacity = "1";
   let circleOpacityOnLineHover = "0.25";
   let circleRadius = 3;
-  let circleRadiusHover = 6;
+  let circleRadiusHover = 9;
 
   const svgRef = useRef();
   useEffect(() => {
@@ -89,6 +89,11 @@ const LineChartTemplate = (props) => {
 
     let lines = svg.append("g").attr("class", "lines");
 
+    const hoverText = d3
+      .select("body")
+      .append("div")
+      .attr("class", "hoverText");
+
     lines
       .selectAll(".line-group")
       .data(data)
@@ -142,22 +147,36 @@ const LineChartTemplate = (props) => {
       .enter()
       .append("g")
       .attr("class", "circle")
-      .on("mouseenter", function (d, i) {
-        // console.log(i);
-        svg
-          .selectAll(".circle-text")
-          .data([data])
-          .join((enter) => enter.append("text"))
-          .attr("class", "circle-text")
-          .text(`${i.Availability}`)
-          .attr("x", d["offsetX"] + 15)
-          .attr("y", d["offsetY"] - 10);
-        d3.select(this).style("cursor", "pointer");
+
+      .on("mousemove", (event, value) => {
+        // console.log(value)
+        hoverText
+          .style("left", event.pageX + 20 + "px")
+          .style("top", event.pageY - 60 + "px")
+          .style("display", "inline-block")
+          .html(`Availability: ${value.Availability}`);
       })
-      .on("mouseleave", (d, i) => {
-        svg.selectAll(".circle-text").remove();
-        d3.select(this).style("cursor", "none");
+
+      .on("mouseout", (d) => {
+        hoverText.style("display", "none");
       })
+
+      // .on("mouseenter", function (d, i) {
+      // console.log(i);
+      //   svg
+      //     .selectAll(".circle-text")
+      //     .data([data])
+      //     .join((enter) => enter.append("text"))
+      //     .attr("class", "circle-text")
+      //     .text(`${i.Availability}`)
+      //     .attr("x", d["offsetX"] + 25)
+      //     .attr("y", d["offsetY"] - 50);
+      //   d3.select(this).style("cursor", "pointer");
+      // })
+      // .on("mouseleave", (d, i) => {
+      //   svg.selectAll(".circle-text").remove();
+      //   d3.select(this).style("cursor", "none");
+      // })
       .append("circle")
       .attr("cx", (d) => xScale(d.Month))
       .attr("cy", (d) => yScale(d.Availability))

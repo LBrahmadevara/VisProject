@@ -1,45 +1,69 @@
-.bar:hover{
-    fill: rgb(255, 166, 0);
+.bar:hover {
+  fill: rgb(255, 166, 0);
 }
 
-.x-axis{
-    font-size: small;
+.bar-title {
+  background-color: #c3b48699;
+  font-weight: 600;
+  border: 0.1px solid #b9a9a9;
+  border-radius: 0px 0px 10px 10px;
+  max-height: 70px;
 }
 
-.y-axis{
-    font-size: small;
+.drop-down {
+  padding-top: 30px;
 }
 
-.y-title{
-    font-family: inherit;
-    font-size: medium;
+.hoverText {
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #f9f3f3;
+  border: 2px solid #d6b9a0f2;
+  padding: 14px;
+  text-align: center;
+  font-size: small;
+  border-radius: 15px;
+  padding: 10px;
 }
 
-.tooltip{
-    font-size: large;
+.x-axis {
+  font-size: small;
 }
 
-.selector{
-    min-width: 62.5rem !important;
-    max-width: 62.5rem !important;
-    padding-bottom: 2rem;
-    
+.y-axis {
+  font-size: small;
 }
 
-.MuiInputBase-root{
-    max-height: 1.875rem;
+.y-title {
+  font-family: inherit;
+  font-size: medium;
 }
 
-.MuiFormLabel-root{
-    padding-bottom: 0.8rem !important;
-    padding-right: 1rem !important;
+.tooltip {
+  font-size: large;
 }
 
-.bar-main{
-    padding-bottom: 5.5rem;
-    background-color: beige;
-    width: 75rem;
-    /* border-radius: 100px 20px; */
-    border-radius: 25px;
-    padding-left: 2.5rem;
+.selector {
+  min-width: 62.5rem !important;
+  max-width: 62.5rem !important;
+  padding-bottom: 2rem;
+}
+
+.MuiInputBase-root {
+  max-height: 1.875rem;
+}
+
+.MuiFormLabel-root {
+  padding-bottom: 0.8rem !important;
+  padding-right: 1rem !important;
+}
+
+.bar-main {
+  padding-bottom: 5.5rem;
+  background-color: beige;
+  width: 75rem;
+  border-radius: 25px;
+  padding-left: 2.5rem;
 }

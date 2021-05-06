@@ -1,13 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import { select, scaleBand, axisBottom, max, scaleLinear, axisLeft } from "d3";
+import * as d3 from "d3";
 
 const GroupedBarChartTemplate = ({ data, keys, colors }) => {
   const svgRef = useRef();
   useEffect(() => {
     const svg = select(svgRef.current);
 
+    const hoverText = d3
+      .select("body")
+      .append("div")
+      .attr("class", "hoverText");
+
     const extent = [0, max(data, (dict) => max(keys, (i) => dict[i]))];
-    console.log(extent);
 
     //Scaling
     const xScale0 = scaleBand()
@@ -27,6 +32,7 @@ const GroupedBarChartTemplate = ({ data, keys, colors }) => {
 
     const yAxis = axisLeft(yScale).ticks(4);
     svg.select(".y-axis").call(yAxis);
+    // console.log(data)
 
     // Axis titles
     svg
@@ -47,35 +53,36 @@ const GroupedBarChartTemplate = ({ data, keys, colors }) => {
       .selectAll("rect")
       .data((d) =>
         keys.map(function (key) {
-          return { key: key, value: d[key] };
+          // console.log({ key: key, value: d[key], month: d["Month"] })
+          // console.log(d)
+          return { key: key, value: d[key], month: d["Month"] };
         })
       )
       .join("rect")
       .attr("x", (d) => xScale1(d.key))
       .attr("width", xScale1.bandwidth())
 
-      .on("mouseenter", (event, value) => {
-        svg
-          .selectAll(".tooltip")
-          .data([value["value"]])
-          .join((enter) => enter.append("text"))
-          .attr("class", "tooltip")
-          .text([value["value"]])
-          .attr("text-anchor", "middle")
-          .transition()
-          .attr("font-size", 18)
-          .style("opacity", 2);
-      })
-
       .on("mousemove", (event, value) => {
-        svg
-          .select(".tooltip")
-          .text(`$${value.value}`)
-          .attr("x", event.offsetX + 50 + "px")
-          .attr("y", event.offsetY - 1 + "px");
+        hoverText
+          .style("left", event.pageX + 20 + "px")
+          .style("top", event.pageY - 60 + "px")
+          .style("display", "inline-block")
+          .html(
+            `Month: ${value.month}` +
+              "<br>" +
+              `${
+                value.key === "Peak Prices"
+                  ? "Peak Price"
+                  : value.key === "Avg Prices"
+                  ? "Avg Price"
+                  : "Low Price"
+              }` +
+              `: ${value.value}`
+          );
       })
-
-      .on("mouseleave", () => svg.select(".tooltip").remove())
+      .on("mouseout", (d) => {
+        hoverText.style("display", "none");
+      })
 
       .attr("y", (d) => yScale(d.value))
       .attr("height", (d) => 300 - yScale(d.value))

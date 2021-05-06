@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Checkbox, InputLabel, MenuItem, Select } from "@material-ui/core";
 import axios from "axios";
-import "../StackedBarChart/StackedBarChart.css"
+import "../StackedBarChart/StackedBarChart.css";
 import GroupedBarChartTemplate from "./GroupedBarChartTemplate";
 
 const GroupedBarChartValues = () => {
@@ -35,18 +35,13 @@ const GroupedBarChartValues = () => {
     if (isDataFetched) {
       fetchData();
     }
-
-    if (data.length !== 0){
-        console.log(data)
-    }
   }, [data]);
 
   const handleLocSelector = (event) => {
     setLocSelector(event.target.value);
-    if (event.target. value === "San Diego"){
-      fetchData()
-    }
-    else{
+    if (event.target.value === "San Diego") {
+      fetchData();
+    } else {
       const body = {
         loc: "San Francisco",
         csv: "avg_prices.csv",
@@ -58,19 +53,24 @@ const GroupedBarChartValues = () => {
     }
   };
   return (
-    <div className="groupBar-main d-flex flex-column p-4">
-      <div className="d-flex flex-row justify-content-end align-items-end">
-        <div className="d-flex flex-column">
-          <InputLabel>Location</InputLabel>
-          <Select
-            label="Select"
-            value={locSelector}
-            onChange={handleLocSelector}
-            variant="outlined"
-          >
-            <MenuItem value="San Diego">San Diego</MenuItem>
-            <MenuItem value="San Francisco">San Francisco</MenuItem>
-          </Select>
+    <div className="groupBar-main d-flex flex-column mt-3 shadow">
+      <div className="group-selector d-flex flex-row justify-content-between mb-4 ml-4">
+        <h5 className="bar-title p-4">
+          Low, Average and Peak Prices in {locSelector}
+        </h5>
+        <div className="d-flex flex-row justify-content-end align-items-end pt-4">
+          <div className="d-flex flex-column">
+            <InputLabel>Location</InputLabel>
+            <Select
+              label="Select"
+              value={locSelector}
+              onChange={handleLocSelector}
+              variant="outlined"
+            >
+              <MenuItem value="San Diego">San Diego</MenuItem>
+              <MenuItem value="San Francisco">San Francisco</MenuItem>
+            </Select>
+          </div>
         </div>
       </div>
       <div className="template-main d-flex mt-4 justify-content-center">

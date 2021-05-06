@@ -10,28 +10,36 @@ let pieData = [];
 let total_availabilites = 0;
 let lineData = [];
 let groupedColData = [];
+let values = [];
 
 app.use(express.json());
 
 // Logic for Bar Chart
 app.post("/csv/barChart/year", (req, res) => {
+  // let values = [];
   fs.createReadStream(`../files/${req.body["csv"]}`)
     .pipe(csv())
     .on("data", (row) => {
+      let dic = {};
       Object.entries(row).forEach(([key, value]) => {
         if (key.trim() == "Month") {
           x.push(value);
+          dic[key.trim()] = value;
         }
         if (key === "Availability") {
           y.push(parseInt(value));
+          dic[key.trim()] = parseInt(value);
         }
       });
+      values.push(dic);
     })
     .on("end", () => {
       console.log("CSV file successfully processed and sent to frontend");
-      res.send({ yValues: y, xValues: x });
+      // console.log(values);
+      res.send({ yValues: y, xValues: x, values: values });
       x = [];
       y = [];
+      values= [];
     });
 });
 
@@ -40,24 +48,29 @@ app.post("/csv/barChart/month", (req, res) => {
   fs.createReadStream(`../files/${req.body["csv"]}`)
     .pipe(csv())
     .on("data", (row) => {
+      let dic = {};
       let push_availability = false;
       Object.entries(row).forEach(([key, value]) => {
-        if (key.trim() == "Daily") {
-          if (value.split("/")[0] == month) {
+        if (key.trim() === "Daily") {
+          if (parseInt(value.split("/")[0]) === month) {
             x.push(value);
+            dic["Month"] = value;
             push_availability = true;
           }
         }
         if (key === "Availability" && push_availability) {
           y.push(parseInt(value));
+          dic[key.trim()] = parseInt(value);
+          values.push(dic);
         }
       });
     })
     .on("end", () => {
       console.log("CSV file successfully processed and sent to frontend");
-      res.send({ yValues: y, xValues: x });
+      res.send({ yValues: y, xValues: x, values: values });
       x = [];
       y = [];
+      values = [];
     });
 });
 
@@ -157,28 +170,26 @@ app.post("/csv/lineChart", (req, res) => {
     });
 });
 
-
 // logic for Grouped Column Bar Chart
 app.post("/csv/groupCol", (req, res) => {
   fs.createReadStream(`../files/${req.body["loc"]}/${req.body["csv"]}`)
-  .pipe(csv())
-  .on("data", (row) => {
-    let dic = {};
-    Object.entries(row).forEach(([key, value]) => {
-      if (key.trim() === "Month") {
-        dic[key.trim()] = value;
-      } else {
-        dic[key] = parseFloat(value);
-      }
+    .pipe(csv())
+    .on("data", (row) => {
+      let dic = {};
+      Object.entries(row).forEach(([key, value]) => {
+        if (key.trim() === "Month") {
+          dic[key.trim()] = value;
+        } else {
+          dic[key] = parseFloat(value);
+        }
+      });
+      groupedColData.push(dic);
+    })
+    .on("end", () => {
+      res.send({ data: groupedColData });
+      console.log("Line Data processed and sent to frontend");
+      groupedColData = [];
     });
-    groupedColData.push(dic);
-  })
-  .on("end", () => {
-    res.send({data: groupedColData})
-    console.log("Line Data processed and sent to frontend");
-    groupedColData = [];
-  });
-
-})
+});
 
 app.listen(port);

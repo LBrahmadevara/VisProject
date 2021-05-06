@@ -54,7 +54,7 @@ const PieChartValues = () => {
         mon: "All",
       };
       axios.post("/csv/pieChart/location", body).then((res) => {
-        console.log(res.data.pieData);
+        // console.log(res.data.pieData);
         setTotalAvailabilites(res.data.totalAvailabilites);
         setIsYearSelected(false);
         setLocSelector(event.target.value);
@@ -82,7 +82,7 @@ const PieChartValues = () => {
       };
     }
     axios.post("/csv/pieChart/location", body).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setTotalAvailabilites(res.data.totalAvailabilites);
       setIsYearSelected(false);
       setMonthSelector(event.target.value);
@@ -91,41 +91,45 @@ const PieChartValues = () => {
   };
 
   return (
-    <div className="pie-main d-flex flex-column justify-content-center align-items-center">
-      <div className="selector d-flex flex-row justify-content-end align-items-end">
-        <div className="p-2">
-          <InputLabel className="">Location</InputLabel>
-          <Select
-            label="Select"
-            value={locSelector}
-            onChange={handleLocSelector}
-            variant="outlined"
-          >
-            {location.map((val, index) => (
-              <MenuItem value={val} key={index}>
-                {val}
-              </MenuItem>
-            ))}
-          </Select>
-        </div>
-        <div className="p-2">
-          <InputLabel className="">Month</InputLabel>
-          <Select
-            label="Select"
-            value={monthSelector}
-            onChange={handleMonthSelector}
-            variant="outlined"
-          >
-            <MenuItem value="All">All</MenuItem>
-            {months.map((val, index) => (
-              <MenuItem value={index} key={index}>
-                {val}
-              </MenuItem>
-            ))}
-          </Select>
+    <div className="pie-main d-flex flex-column justify-content-center align-items-center shadow">
+      <div className="pie-selector d-flex flex-row justify-content-between mb-4">
+        <h5 className="bar-title p-4">
+          Most popular room type in {locSelector}
+        </h5>
+        <div className="drop-down d-flex flex-row justify-content-end align-items-end">
+          <div className="p-2">
+            <InputLabel className="">Location</InputLabel>
+            <Select
+              label="Select"
+              value={locSelector}
+              onChange={handleLocSelector}
+              variant="outlined"
+            >
+              {location.map((val, index) => (
+                <MenuItem value={val} key={index}>
+                  {val}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
+          <div className="p-2">
+            <InputLabel className="">Month</InputLabel>
+            <Select
+              label="Select"
+              value={monthSelector}
+              onChange={handleMonthSelector}
+              variant="outlined"
+            >
+              <MenuItem value="All">All</MenuItem>
+              {months.map((val, index) => (
+                <MenuItem value={index} key={index}>
+                  {val}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
         </div>
       </div>
-      {data.length !== 0 && console.log(data)}
       {data.length !== 0 && (
         <PieChartTemplate
           values={data}

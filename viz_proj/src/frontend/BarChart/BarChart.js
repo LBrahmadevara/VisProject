@@ -5,7 +5,6 @@ import {
   scaleLinear,
   axisBottom,
   axisLeft,
-  scaleOrdinal,
 } from "d3";
 import * as d3 from "d3";
 import "./BarChart.css";

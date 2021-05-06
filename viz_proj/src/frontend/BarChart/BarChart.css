@@ -1,64 +1,67 @@
-.bar:hover{
-    fill: rgb(255, 166, 0);
+.bar:hover {
+  fill: rgb(255, 166, 0);
 }
 
-.bar-title{
-    background-color: #c3b48699;
-    font-weight: 600;
-    border-radius: 0px 0px 10px 10px;
+.bar-title {
+  background-color: #c3b48699;
+  font-weight: 600;
+  border-radius: 0px 0px 10px 10px;
+  max-height: 70px;
+}
+
+.drop-down {
+  padding-top: 30px;
 }
 
 .hoverText {
-    position: absolute;
-    display: none;
-    min-width: 80px;
-    height: auto;
-    background: none repeat scroll 0 0 #f9f3f3;
-    border: 2px solid #d6b9a0f2;
-    padding: 14px;
-    text-align: center;
-    font-size: small;
-    border-radius: 15px;
-  }
-
-.x-axis{
-    font-size: small;
+  position: absolute;
+  display: none;
+  min-width: 80px;
+  height: auto;
+  background: none repeat scroll 0 0 #f9f3f3;
+  border: 2px solid #d6b9a0f2;
+  padding: 14px;
+  text-align: center;
+  font-size: small;
+  border-radius: 15px;
 }
 
-.y-axis{
-    font-size: small;
+.x-axis {
+  font-size: small;
 }
 
-.y-title{
-    font-family: inherit;
-    font-size: medium;
+.y-axis {
+  font-size: small;
 }
 
-.tooltip{
-    font-size: large;
+.y-title {
+  font-family: inherit;
+  font-size: medium;
 }
 
-.selector{
-    min-width: 62.5rem !important;
-    max-width: 62.5rem !important;
-    padding-bottom: 2rem;
-    
+.tooltip {
+  font-size: large;
 }
 
-.MuiInputBase-root{
-    max-height: 1.875rem;
+.selector {
+  min-width: 62.5rem !important;
+  max-width: 62.5rem !important;
+  padding-bottom: 2rem;
 }
 
-.MuiFormLabel-root{
-    padding-bottom: 0.8rem !important;
-    padding-right: 1rem !important;
+.MuiInputBase-root {
+  max-height: 1.875rem;
 }
 
-.bar-main{
-    padding-bottom: 5.5rem;
-    background-color: beige;
-    width: 75rem;
-    /* border-radius: 100px 20px; */
-    border-radius: 25px;
-    padding-left: 2.5rem;
+.MuiFormLabel-root {
+  padding-bottom: 0.8rem !important;
+  padding-right: 1rem !important;
+}
+
+.bar-main {
+  padding-bottom: 5.5rem;
+  background-color: beige;
+  width: 75rem;
+  border-radius: 25px;
+  padding-left: 2.5rem;
 }

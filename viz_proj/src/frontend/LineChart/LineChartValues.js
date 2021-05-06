@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import LineChartTemplate from "./LineChartTemplate";
-import "./LineChart.css"
+import "./LineChart.css";
 
 const LineChartValues = () => {
   const months = [
@@ -39,7 +39,12 @@ const LineChartValues = () => {
   }, [data]);
 
   return (
-    <div className="line-main d-flex flex-column justify-content-center align-items-center mt-4 pt-4">
+    <div className="line-main d-flex flex-column justify-content-center align-items-center pt-4">
+      <div className="line-selector d-flex">
+        <h5 className="bar-title p-4">
+          Monthly trend of availabilities for San Diego and San Francisco
+        </h5>
+      </div>
       {data.length > 0 && (
         <LineChartTemplate months={months} data={data} cities={cities} />
       )}

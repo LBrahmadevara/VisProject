@@ -6,6 +6,13 @@ svg {
   fill: none;
 }
 
+.line-selector {
+  min-width: 62.5rem !important;
+  max-width: 62.5rem !important;
+  margin-top: -24px;
+  margin-left: 25px;
+}
+
 .axis path {
   stroke: black;
 }
@@ -25,18 +32,18 @@ svg {
   /* border-radius: 100px 20px; */
   border-radius: 25px;
   padding-left: 2.5rem;
+  margin-top: 40px;
 }
 
-#chart{
+#chart {
   padding-top: 2.5rem;
 }
 
-.xTitle{
+.xTitle {
   margin-top: 2.75rem !important;
 }
 
-
-.circle{
+.circle {
   min-width: 0.938rem;
   max-width: 0.938rem;
   min-height: 0.938rem;

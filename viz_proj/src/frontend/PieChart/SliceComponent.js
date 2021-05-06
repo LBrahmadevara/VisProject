@@ -102,10 +102,13 @@ const SliceComponent = (props) => {
           fill={fill}
         >
           <tspan dy="1em" x="0.3em">
-            {label}{" "}
+            {dataValue}
           </tspan>
           <tspan dy="1em" x="0.3em">
-            {dataValue}{" "}({Math.round((dataValue / totalAvailabilites) * 100)}%)
+            {label}s
+          </tspan>
+          <tspan dy="1em" x="0.3em">
+            ({Math.round((dataValue / totalAvailabilites) * 100)}%)
           </tspan>
         </text>
       )}

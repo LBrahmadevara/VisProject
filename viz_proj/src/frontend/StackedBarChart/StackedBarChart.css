@@ -1,11 +1,19 @@
-.template-main{
-    min-width: 1100px;
-    min-height: 300px;
+.template-main {
+  min-width: 1100px;
+  min-height: 300px;
 }
 
-.groupBar-main{
-    background-color: beige;
-    border-radius: 25px;
-    width: 75rem;
-    padding-bottom: 5.5rem;
+.groupBar-main {
+  background-color: beige;
+  border-radius: 25px;
+  width: 75rem;
+  padding-bottom: 3rem;
+  padding-left: 2.5rem;
+}
+
+.group-selector {
+  min-width: 62.5rem !important;
+  max-width: 62.5rem !important;
+  padding-bottom: 2rem;
+  padding-left: 5.6rem;
 }

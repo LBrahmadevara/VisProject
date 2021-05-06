@@ -209,41 +209,40 @@ const BarChart = () => {
 
   return (
     <div className="bar-main d-flex flex-column justify-content-center align-items-center mt-4">
-      <div className="selector d-flex justify-content-start align-items-start">
-        <h5 className="bar-title p-4">Most Availability for San Diego in a year</h5>
-        <h5></h5>
-        
-      </div>
-      <div className="selector d-flex flex-row justify-content-end align-items-end">
-        <div className=" d-flex flex-column p-2">
-          <InputLabel className="">Month</InputLabel>
-          <Select
-            label="Select"
-            value={monthSelector}
-            onChange={handleMonthSelector}
-            variant="outlined"
-          >
-            <MenuItem value="All Months">All Months</MenuItem>
-            {months.map((val, index) => (
-              <MenuItem value={val} key={index}>
-                {val}
-              </MenuItem>
-            ))}
-          </Select>
-        </div>
-        <div className="d-flex flex-column p-2">
-          <InputLabel className="">Year</InputLabel>
-          <Select
-            label="Select"
-            value={yearSelector}
-            onChange={handleYearSelector}
-            variant="outlined"
-          >
-            {/* <MenuItem value="None">None</MenuItem> */}
-            <MenuItem value="2019">2019</MenuItem>
-            <MenuItem value="2020">2020</MenuItem>
-            <MenuItem value="2021">2021</MenuItem>
-          </Select>
+      <div className="selector d-flex flex-row justify-content-between mb-4">
+        <h5 className="bar-title p-4">
+          Most Availability for San Diego in a year
+        </h5>
+        <div className="drop-down d-flex flex-row justify-content-end align-items-end">
+          <div className="d-flex flex-column p-2">
+            <InputLabel className="">Month</InputLabel>
+            <Select
+              label="Select"
+              value={monthSelector}
+              onChange={handleMonthSelector}
+              variant="outlined"
+            >
+              <MenuItem value="All Months">All Months</MenuItem>
+              {months.map((val, index) => (
+                <MenuItem value={val} key={index}>
+                  {val}
+                </MenuItem>
+              ))}
+            </Select>
+          </div>
+          <div className="d-flex flex-column p-2">
+            <InputLabel className="">Year</InputLabel>
+            <Select
+              label="Select"
+              value={yearSelector}
+              onChange={handleYearSelector}
+              variant="outlined"
+            >
+              <MenuItem value="2019">2019</MenuItem>
+              <MenuItem value="2020">2020</MenuItem>
+              <MenuItem value="2021">2021</MenuItem>
+            </Select>
+          </div>
         </div>
       </div>
       <div className="d-flex mt-4 w-100 justify-content-center">

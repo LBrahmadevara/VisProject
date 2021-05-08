@@ -17,7 +17,7 @@ app.use(express.json());
 // Logic for Bar Chart
 app.post("/csv/barChart/year", (req, res) => {
   // let values = [];
-  fs.createReadStream(`../files/${req.body["csv"]}`)
+  fs.createReadStream(`../files/San Diego/${req.body["csv"]}`)
     .pipe(csv())
     .on("data", (row) => {
       let dic = {};
@@ -45,7 +45,7 @@ app.post("/csv/barChart/year", (req, res) => {
 
 app.post("/csv/barChart/month", (req, res) => {
   let month = req.body["month"];
-  fs.createReadStream(`../files/${req.body["csv"]}`)
+  fs.createReadStream(`../files/San Diego/${req.body["csv"]}`)
     .pipe(csv())
     .on("data", (row) => {
       let dic = {};

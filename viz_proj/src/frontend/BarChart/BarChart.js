@@ -210,7 +210,7 @@ const BarChart = () => {
     <div className="bar-main d-flex flex-column justify-content-center align-items-center mt-4 shadow">
       <div className="selector d-flex flex-row justify-content-between mb-4">
         <h5 className="bar-title p-4">
-          Availability trend for San Diego
+          Availability trend for San Diego ({yearSelector})
         </h5>
         <div className="drop-down d-flex flex-row justify-content-end align-items-end">
           <div className="d-flex flex-column p-2">

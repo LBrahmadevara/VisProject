@@ -42,7 +42,7 @@ const LineChartValues = () => {
     <div className="line-main d-flex flex-column justify-content-center align-items-center pt-4 shadow">
       <div className="line-selector d-flex">
         <h5 className="bar-title p-4">
-          Comparing availabilities between San Diego and San Francisco
+          Comparing availabilities between San Diego and San Francisco (2019)
         </h5>
       </div>
       {data.length > 0 && (

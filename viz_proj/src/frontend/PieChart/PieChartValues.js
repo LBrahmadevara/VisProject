@@ -94,7 +94,7 @@ const PieChartValues = () => {
     <div className="pie-main d-flex flex-column justify-content-center align-items-center shadow">
       <div className="pie-selector d-flex flex-row justify-content-between mb-4">
         <h5 className="bar-title p-4">
-          Most popular room type in {locSelector}
+          Most popular room type in {locSelector} (2019)
         </h5>
         <div className="drop-down d-flex flex-row justify-content-end align-items-end">
           <div className="p-2">

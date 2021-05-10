@@ -77,7 +77,7 @@ const GroupedBarChartTemplate = ({ data, keys, colors }) => {
                   ? "Avg Price"
                   : "Low Price"
               }` +
-              `: ${value.value}`
+              `: $${value.value}`
           );
       })
       .on("mouseout", (d) => {
